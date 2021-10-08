@@ -5,9 +5,13 @@
  */
 public class Resident extends Student{
     private boolean financialAid = false; //true if they received it, false if they didn't
-    private double baseTuition = 12536.0;
-    private double creditHour = 404.0;
-    private double residentTuition;
+
+    private static double baseTuition = 12536.0;
+    private static double creditHour = 404.0;
+
+    public Resident(String name, String major, int creditHours){
+        super(name, major, creditHours);
+    }
 
     /**
      * The calculation method for the tuition of a resident student.
@@ -16,7 +20,7 @@ public class Resident extends Student{
     public void tuitionDue(){
         double total = 0.0;
         //calculations
-        residentTuition = total;
+        this.setTuitionDue(total);
     }
 
     /**
@@ -26,13 +30,5 @@ public class Resident extends Student{
     @Override
     public String toString(){
 
-    }
-
-    /**
-     * Getter for tuition after calculation.
-     * @return the tuition of the resident in double form.
-     */
-    public double getTuition(){
-        return residentTuition;
     }
 }

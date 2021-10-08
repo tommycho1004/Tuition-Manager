@@ -3,8 +3,8 @@
  * @author Tommy Cho, Neha Gudur
  */
 public enum Major {
-    CS, IT, BA, EE, ME;
-    public String genreString()
+    CS, IT, BA, EE, ME, Unknown;
+    public String majorString()
     {
         if (this == CS){
             return "CS";
@@ -22,7 +22,7 @@ public enum Major {
             return "ME";
         }
         else{
-            return "Major Undefined";
+            return "Unknown";
         }
     }
 }

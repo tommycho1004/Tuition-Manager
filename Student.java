@@ -7,11 +7,62 @@
 public class Student {
     private Profile profile;
     private int creditHours;
-    private double universityFee = 3268.0;
     private boolean isFullTime;
     private Date lastPaid;
     private double totalPayment;
-    private double tuitionDue;
+    private double tuitionDue = 0.0;
+
+    /**
+     * A setter method for last paid date
+     * @param date Date of current payment
+     */
+    public void setLastPaid(Date date){
+        this.lastPaid = date;
+    }
+
+    /**
+     * A setter method for the total payment a student has made
+     * @param payment total payment in double form
+     */
+    public void setTotalPayment(double payment){
+        this.totalPayment = payment;
+    }
+
+    /**
+     * A setter method for the tuition due for a student
+     * @param tuition tuition due in double form
+     */
+    public void setTuitionDue(double tuition){
+        this.tuitionDue = tuition;
+    }
+
+    /**
+     * A getter method for the number of credit hours a student has
+     * @return credit hours in int form
+     */
+    public int getCreditHours(){
+        return creditHours;
+    }
+
+    /**
+     * A getter method for the total payment a student has made
+     * @return the total payment in double form
+     */
+    public double getTotalPayment(){
+        return totalPayment;
+    }
+
+    /**
+     * A getter method for the tuition that a student is due
+     * @return tuition due in double form
+     */
+    public double getTuitionDue(){
+        return tuitionDue;
+    }
+
+
+    public static double universityFee = 3268.0;
+    public static double partTimeUniversityFee = 2614.4;
 
     /**
      * A default constructor for the student object
@@ -27,7 +78,6 @@ public class Student {
      * @param major Major of the student in string form
      * @param creditHours Credit hours the student is taking in integer form
      */
-
     public Student(String name, String major, int creditHours) throws IllegalArgumentException{
         if(creditHours > 24 || creditHours < 3){
             throw new IllegalArgumentException("Credit hours must be between 3 and 24!");
@@ -65,17 +115,7 @@ public class Student {
      */
     @Override
     public String toString(){
-
-    }
-
-
-    public void populate(int creditHours){
-        if (creditHours >= 12)
-        {
-            isFullTime = true;
-        }
-        else{
-            isFullTime = false;
-        }
+        return this.profile.toString() + ":" + this.creditHours + " credit hours:tuition due:" + this.tuitionDue + ":total " +
+                "payment:" + this.totalPayment + ":last payment date:" + this.lastPaid.dateString() + ":Student";
     }
 }

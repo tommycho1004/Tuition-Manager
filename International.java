@@ -66,14 +66,17 @@ public class International extends NonResident{
         {
             if(!studyAbroad){
                 if (this.getCreditHours() <= extraCredits){
+                    //less than 16 hours calculation (internationals cannot be part time
                     total = baseTuition + universityFee + additionalFee;
                 }
                 else{
+                    //more than 16 hours calculation
                     total = baseTuition + universityFee + additionalFee + (this.getCreditHours() - extraCredits) *
                             creditHourTuition;
                 }
             }
             else{
+                //if study abroad calculation
                 total = universityFee + additionalFee;
             }
             this.setTuitionDue(total);

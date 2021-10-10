@@ -11,6 +11,79 @@ import java.util.StringTokenizer;
 public class TuitionManager {
 
     /**
+     * A helper method to check whether the state is part of the tri-state area or not
+     * @param state state the user inputted where they're living in
+     * @return true if the state is NY or CT, false otherwise
+     */
+    public boolean stateChecker(String state){
+        if (state.equals("NY") || state.equals("nY") || state.equals("Ny") || state.equals("ny") ||
+                state.equals("CT") || state.equals("cT") || state.equals("Ct") || state.equals("ct")){
+            return true;
+        }
+        else{
+            System.out.println("Not part of the tri-state area.");
+            return false;
+        }
+    }
+
+    /**
+     * A helper method to check if the credit hours are numeric or not
+     * @param creditHourString credit hours of a student in string form
+     * @return true if it is a number, false otherwise
+     */
+    public boolean isNumeric(String creditHourString) {
+        if(creditHourString != null && creditHourString.matches("[-+]?\\d*\\.?\\d+"))
+        {
+            return true;
+        }
+        else{
+            System.out.println("Invalid credit hours.");
+            return false;
+        }
+    }
+
+    public boolean parameterCheckerThree(StringTokenizer st){
+        if(st.countTokens() < 2){
+            System.out.println("Missing data in the command line.");
+            return false;
+        }
+        else if(st.countTokens() == 2){
+            System.out.println("Credit hours missing.");
+            return false;
+        }
+        else if(st.countTokens() != 3){
+            System.out.println("Invalid number of parameters!");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public boolean parameterCheckerFour(StringTokenizer st){
+        if(st.countTokens() < 2){
+            System.out.println("Missing data in the command line.");
+            return false;
+        }
+        else if(st.countTokens() == 2){
+            System.out.println("Credit hours missing.");
+            return false;
+        }
+        else if(st.countTokens() < 4){
+            System.out.println("Missing data in the command line.");
+            return false;
+        }
+        else if(st.countTokens() != 4){
+            System.out.println("Invalid number of parameters!");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+
+    /**
      * A helper method to determine if a major is valid or not
      * @param major Major of a student in string form
      * @return true if the major is valid, false otherwise
@@ -53,6 +126,21 @@ public class TuitionManager {
     }
 
     /**
+     * Helper method to determine if an international student has enough credits or not
+     * @param creditHours credits the international student is taking
+     * @return true if hours are valid, false otherwise
+     */
+    public boolean creditCheckerInternational(int creditHours){
+        if (creditHours < 12){
+            System.out.println("International students must enroll at least 12 credits.");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
      * A helper method that reads the input command and executes its respective function in the roster
      * @param st the string tokenizer with inputs from the user
      * @param roster the roster being modified
@@ -60,45 +148,75 @@ public class TuitionManager {
      */
     public void addHelper(StringTokenizer st, Roster roster, String command){
         if (command.equals("AR")){
-            if(st.countTokens() != 3){
-                System.out.println("Invalid number of parameters!");
-            }
-            else{
+            if(parameterCheckerThree(st)){
                 String name = st.nextToken();
                 String major = st.nextToken();
-                int creditHours = Integer.parseInt(st.nextToken());
-                if(creditChecker(creditHours) && majorChecker(major)){
-                    Resident resident = new Resident(name, major, creditHours);
-                    roster.add(resident);
+                String creditHourString = st.nextToken();
+                if(isNumeric(creditHourString)){ //check if credit hours are valid
+                    int creditHours = Integer.parseInt(creditHourString);
+                    if(creditChecker(creditHours) && majorChecker(major)){ //check for valid credit hours and major
+                        Resident resident = new Resident(name, major, creditHours);
+                        roster.add(resident);
+                    }
                 }
             }
-
+            else{
+                return;
+            }
         }
         else if(command.equals("AN")){
-            if(st.countTokens() != 3){
-                System.out.println("Invalid number of parameters!");
-            }
-            else{
+            if(parameterCheckerThree(st)){
                 String name = st.nextToken();
                 String major = st.nextToken();
-                int creditHours = Integer.parseInt(st.nextToken());
-                if(creditChecker(creditHours) && majorChecker(major)){
-                    NonResident nonResident = new NonResident(name, major, creditHours);
-                    roster.add(nonResident);
+                String creditHourString = st.nextToken();
+                if(isNumeric(creditHourString)){ //check if credit hours are valid
+                    int creditHours = Integer.parseInt(creditHourString);
+                    if(creditChecker(creditHours) && majorChecker(major)){ //check for valid credit hours and major
+                        NonResident nonResident = new NonResident(name, major, creditHours);
+                        roster.add(nonResident);
+                    }
                 }
+            }
+            else{
+                return;
             }
         }
         else if(command.equals("AT")){
-            if(st.countTokens() != 4){
-                System.out.println("Invalid number of parameters!");
+            if(parameterCheckerFour(st)){
+                String name = st.nextToken();
+                String major = st.nextToken();
+                String creditHourString = st.nextToken();
+                String state = st.nextToken();
+                if(isNumeric(creditHourString) && stateChecker(state)){ //check if credit hours and state are valid
+                    int creditHours = Integer.parseInt(creditHourString);
+                    if(creditChecker(creditHours) && majorChecker(major)){ //check for valid credit hours and major
+                        TriState triState = new TriState(name, major, creditHours, state);
+                        roster.add(triState);
+                    }
+                }
+                else{
+                    return;
+                }
             }
-
         }
         else{ //add international student
-            if(st.countTokens() != 4){
-                System.out.println("Invalid number of parameters!");
+            if(parameterCheckerFour(st)){
+                String name = st.nextToken();
+                String major = st.nextToken();
+                String creditHourString = st.nextToken();
+                Boolean studyAbroadStatus = Boolean.parseBoolean(st.nextToken());
+                if(isNumeric(creditHourString)){ //check if credit hours and state are valid
+                    int creditHours = Integer.parseInt(creditHourString);
+                    //check for valid credit hours and major
+                    if(creditChecker(creditHours) && majorChecker(major) && creditCheckerInternational(creditHours)){
+                        International international = new International(name, major, creditHours, studyAbroadStatus);
+                        roster.add(international);
+                    }
+                }
+                else{
+                    return;
+                }
             }
-
         }
     }
 

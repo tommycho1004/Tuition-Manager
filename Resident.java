@@ -3,14 +3,45 @@
  * Use this class to calculate the tuition due for a resident.
  * @author Tommy Cho, Neha Gudur
  */
+
+import java.text.DecimalFormat;
+
 public class Resident extends Student{
     private boolean financialAid = false; //true if they received it, false if they didn't
+    private double financialAidAmount;
 
     private static double baseTuition = 12536.0;
-    private static double creditHour = 404.0;
+    private static double creditHourTuition = 404.0;
 
+    /**
+     * Parameterized constructor for a resident that calls the super constructor.
+     * @param name Name of the student in string form
+     * @param major Major of the student in string form
+     * @param creditHours Credit hours the student is taking in int form
+     */
     public Resident(String name, String major, int creditHours){
         super(name, major, creditHours);
+    }
+
+    /**
+     * A method that gives a student a specified amount of financial aid and updates their tuition due
+     * @param amount amount of financial aid a student receives
+     */
+    public void receiveFinAid(double amount){
+        double newTuition = this.getTuitionDue() - amount;
+        this.setTuitionDue(newTuition);
+        this.financialAid = true;
+        this.financialAidAmount = amount;
+    }
+
+    private String finAidString(){
+        if (financialAid){
+            DecimalFormat dec1 = new DecimalFormat("#.00");
+            return "financial aid $" + dec1.format(this.financialAidAmount);
+        }
+        else{
+            return "";
+        }
     }
 
     /**
@@ -19,9 +50,28 @@ public class Resident extends Student{
     @Override
     public void tuitionDue(){
         double total = 0.0;
-        //calculations
-        this.setTuitionDue(total);
+        if (this.getTuitionDue() == 0 && this.getTotalPayment() == 0)
+        {
+            if (this.getIsFullTime()){
+                if(this.getCreditHours() <= extraCredits){
+                    total = baseTuition + universityFee;
+                }
+                else{
+                    total = baseTuition + universityFee + (this.getCreditHours() - extraCredits) * creditHourTuition;
+                }
+
+            }
+            else{
+                total = this.getCreditHours() * creditHourTuition + partTimeUniversityFee;
+            }
+            this.setTuitionDue(total);
+        }
+        else{
+            return;
+        }
     }
+
+
 
     /**
      * Converts the information of the student to a string format
@@ -29,6 +79,9 @@ public class Resident extends Student{
      */
     @Override
     public String toString(){
-
+        DecimalFormat dec = new DecimalFormat("#.00");
+        return this.getProfile().toString() + ":" + this.getCreditHours() + " credit hours:tuition due:" +
+                dec.format(this.getTuitionDue()) + ":total payment:" + dec.format(this.getTotalPayment()) +
+                ":last payment date:" + this.getLastPaid().dateString() + ":resident" + this.finAidString();
     }
 }

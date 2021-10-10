@@ -3,6 +3,7 @@
  *  Use this class to populate attributes into a new Student object.
  * @author Tommy Cho, Neha Gudur
  */
+import java.text.DecimalFormat;
 
 public class Student {
     private Profile profile;
@@ -12,6 +13,16 @@ public class Student {
     private double totalPayment;
     private double tuitionDue = 0.0;
 
+    public static double universityFee = 3268.0;
+    public static double partTimeUniversityFee = 2614.4;
+    public static int extraCredits = 16;
+
+    public void setProfile(Profile profile){
+        this.profile = profile;
+    }
+    public void setCreditHours(int creditHours){
+        this.creditHours = creditHours;
+    }
     /**
      * A setter method for last paid date
      * @param date Date of current payment
@@ -37,11 +48,28 @@ public class Student {
     }
 
     /**
+     * A getter method for a student's profile
+     * @return the student's profile in Profile object form
+     */
+    public Profile getProfile() {return profile;}
+    /**
      * A getter method for the number of credit hours a student has
      * @return credit hours in int form
      */
     public int getCreditHours(){
         return creditHours;
+    }
+
+    /**
+     * A getter method for the fulltime status of a student
+     * @return
+     */
+    public boolean getIsFullTime(){
+        return isFullTime;
+    }
+
+    public Date getLastPaid(){
+        return lastPaid;
     }
 
     /**
@@ -60,10 +88,6 @@ public class Student {
         return tuitionDue;
     }
 
-
-    public static double universityFee = 3268.0;
-    public static double partTimeUniversityFee = 2614.4;
-
     /**
      * A default constructor for the student object
      */
@@ -79,9 +103,6 @@ public class Student {
      * @param creditHours Credit hours the student is taking in integer form
      */
     public Student(String name, String major, int creditHours) throws IllegalArgumentException{
-        if(creditHours > 24 || creditHours < 3){
-            throw new IllegalArgumentException("Credit hours must be between 3 and 24!");
-        }
         this.profile.setName(name);
         this.profile.setMajor(major);
         this.creditHours = creditHours;
@@ -115,7 +136,10 @@ public class Student {
      */
     @Override
     public String toString(){
-        return this.profile.toString() + ":" + this.creditHours + " credit hours:tuition due:" + this.tuitionDue + ":total " +
-                "payment:" + this.totalPayment + ":last payment date:" + this.lastPaid.dateString() + ":Student";
+        DecimalFormat dec = new DecimalFormat("#.00");
+        return this.profile.toString() + ":" + this.creditHours + " credit hours:tuition due:" +
+                dec.format(this.tuitionDue) + ":total payment:" + dec.format(this.totalPayment) +
+                ":last payment date:" + this.lastPaid.dateString() + ":student";
     }
+
 }

@@ -49,19 +49,24 @@ public class TriState extends NonResident{
         {
             if (this.getIsFullTime()){
                 if(this.getCreditHours() <= extraCredits){
+                    //full time less than 16 credits calculation
                     total = baseTuition + universityFee;
                 }
                 else{
+                    //full time more than 16 credits calculation
                     total = baseTuition + universityFee + (this.getCreditHours() - extraCredits) * creditHourTuition;
                 }
                 if (isNY){
+                    //setting the discount for full time NY people
                     this.setTuitionDue(total - nyDiscount);
                 }
                 else{
+                    //setting the discount for full time CT people
                     this.setTuitionDue(total - ctDiscount);
                 }
             }
             else{
+                //part time calculation (tri-state part time do not get discount)
                 total = this.getCreditHours() * creditHourTuition + partTimeUniversityFee;
                 this.setTuitionDue(total);
             }

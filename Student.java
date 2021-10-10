@@ -100,9 +100,19 @@ public class Student {
      * A parameterized constructor for the student object
      * @param name Name of the student in string form
      * @param major Major of the student in string form
+     */
+    public Student(String name, String major){
+        this.profile.setName(name);
+        this.profile.setMajor(major);
+    }
+
+    /**
+     * A parameterized constructor for the student object
+     * @param name Name of the student in string form
+     * @param major Major of the student in string form
      * @param creditHours Credit hours the student is taking in integer form
      */
-    public Student(String name, String major, int creditHours) throws IllegalArgumentException{
+    public Student(String name, String major, int creditHours){
         this.profile.setName(name);
         this.profile.setMajor(major);
         this.creditHours = creditHours;

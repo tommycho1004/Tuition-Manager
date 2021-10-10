@@ -1,59 +1,79 @@
 /**
  * The profile class that is used to identify students.
+ *
  * @author Tommy Cho, Neha Gudur
  */
-public class Profile {
+public class Profile implements Comparable<Profile> {
     private String name;
     private Major major; //5 majors and 2-character each: CS, IT, BA, EE, ME
 
     /**
      * A setter method to set the name of a student in their profile.
+     *
      * @param name name of a student in String form
      */
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int compareTo(Profile profile) { // - if name 2 goes after name 1, + if name 1 goes after
+        String Name1 = this.name.replace(" ", "").toLowerCase();
+        String Name2 = profile.name.replace(" ", "").toLowerCase();
+        int compareLength = Math.min(Name1.length(), Name2.length());
+        for (int i = 0; i < compareLength; i++) {
+            int str1_ch = (int) Name1.charAt(i);
+            int str2_ch = (int) Name2.charAt(i);
+            if (str1_ch != str2_ch) {
+                return str1_ch - str2_ch;
+            }
+        }
+        if (Name1.length() != Name2.length()) {
+            return Name1.length() - Name2.length();
+        } else {
+            return 0;
+        }
     }
 
     /**
      * A setter method to set the major of a student in their profile.
+     *
      * @param major major or a student in String form.
      */
-    public void setMajor(String major){
-        if (major.equals("CS") || major.equals("Cs") || major.equals("cS") || major.equals("cs")){
+    public void setMajor(String major) {
+        if (major.equals("CS") || major.equals("Cs") || major.equals("cS") || major.equals("cs")) {
             this.major = Major.CS;
-        }
-        else if (major.equals("IT") || major.equals("It") || major.equals("iT") || major.equals("it")){
+        } else if (major.equals("IT") || major.equals("It") || major.equals("iT") || major.equals("it")) {
             this.major = Major.IT;
-        }
-        else if (major.equals("BA") || major.equals("Ba") || major.equals("bA") || major.equals("ba")){
+        } else if (major.equals("BA") || major.equals("Ba") || major.equals("bA") || major.equals("ba")) {
             this.major = Major.BA;
-        }
-        else if (major.equals("EE") || major.equals("Ee") || major.equals("eE") || major.equals("ee")){
+        } else if (major.equals("EE") || major.equals("Ee") || major.equals("eE") || major.equals("ee")) {
             this.major = Major.EE;
-        }
-        else if (major.equals("ME") || major.equals("Me") || major.equals("mE") || major.equals("me")){
+        } else if (major.equals("ME") || major.equals("Me") || major.equals("mE") || major.equals("me")) {
             this.major = Major.ME;
-        }
-        else {
+        } else {
             this.major = Major.Unknown;
         }
     }
+
     /**
      * Converts the information of the student to a string format
+     *
      * @return the student's profile in the form of a string
      */
     @Override
-    public String toString(){
+    public String toString() {
         return this.name + ":" + this.major.majorString();
     }
 
     /**
      * Compares two students and determines if they are the same
+     *
      * @param obj student that is being compared
      * @return true if the two students are equal
      */
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }

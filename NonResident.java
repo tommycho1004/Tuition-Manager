@@ -35,14 +35,16 @@ public class NonResident extends Student{
         {
             if (this.getIsFullTime()){
                 if(this.getCreditHours() <= extraCredits){
+                    //full time less than 16 credits calculation:
                     total = baseTuition + universityFee;
                 }
                 else{
+                    //full time more than 16 credits calculation
                     total = baseTuition + universityFee + (this.getCreditHours() - extraCredits) * creditHourTuition;
                 }
-
             }
             else{
+                //part time calculation
                 total = this.getCreditHours() * creditHourTuition + partTimeUniversityFee;
             }
             this.setTuitionDue(total);

@@ -42,6 +42,11 @@ public class TuitionManager {
         }
     }
 
+    /**
+     * A helper method for the addHelper to check if the number of parameters (3) entered is valid
+     * @param st String tokenizer from the user
+     * @return true if parameters are valid, false otherwise
+     */
     public boolean parameterCheckerThree(StringTokenizer st){
         if(st.countTokens() < 2){
             System.out.println("Missing data in the command line.");
@@ -60,6 +65,11 @@ public class TuitionManager {
         }
     }
 
+    /**
+     * A helper method for the addHelper to check if the number of parameters (4) entered is valid
+     * @param st String tokenizer from the user
+     * @return true if parameters are valid, false otherwise
+     */
     public boolean parameterCheckerFour(StringTokenizer st){
         if(st.countTokens() < 2){
             System.out.println("Missing data in the command line.");
@@ -221,6 +231,43 @@ public class TuitionManager {
     }
 
     /**
+     * A helper method for the tuitionHelper to check if the parameters for tuition payment is valid or not
+     * @param st String tokenizer from the user
+     * @return true if the parameters are valid, false otherwise
+     */
+    public boolean parameterCheckerPayment(StringTokenizer st){
+        if(st.countTokens() < 2){
+            System.out.println("Missing data in the command line.");
+            return false;
+        }
+        else if(st.countTokens() < 3){
+            System.out.println("Payment amount missing.");
+            return false;
+        }
+        else if(st.countTokens() < 4){
+            System.out.println("Missing date of payment.");
+            return false;
+        }
+        else if(st.countTokens() != 4){
+            System.out.println("Invalid number of parameters!");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public boolean paymentChecker(int paymentAmount){
+        if(paymentAmount <= 0){
+            System.out.println("Invalid amount");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
      * A helper method that reads the input command and executes its respective function having to do with tuition
      * @param st the string tokenizer with inputs from the user
      * @param roster the roster being modified
@@ -228,10 +275,33 @@ public class TuitionManager {
      */
     public void tuitionHelper(StringTokenizer st, Roster roster, String command){
         if(command.equals("T")){
-
+            if(parameterCheckerPayment(st)){
+                String name = st.nextToken();
+                String major = st.nextToken();
+                int paymentAmount = Integer.parseInt(st.nextToken());
+                Date date = new Date(st.nextToken());
+                if(paymentChecker(paymentAmount) && majorChecker(major)){
+                    Student student = new Student(name, major);
+                    student.payTuition(paymentAmount, date);
+                    //add error if payment amount is greater than payment due
+                }
+            }
         }
         else if(command.equals("S")){
-
+            //find student first
+            if(st.countTokens() != 3){
+                System.out.println("Invalid number of parameters!");
+                String name = st.nextToken();
+                String major = st.nextToken();
+                boolean studyAbroadStatus = Boolean.parseBoolean(st.nextToken());
+                if(majorChecker(major)){
+                    Student student = new Student(name, major);
+                    if(student instanceof International){//find student first to edit roster
+                        International iStudent = (International) student;
+                        iStudent.setStudyAbroad();
+                    }
+                }
+            }
         }
         else if(command.equals("C")){
 

@@ -9,10 +9,14 @@ public class NonResident extends Student{
     protected static double baseTuition = 29737.0;
     protected static double creditHourTuition = 966.0;
 
+    /**
+     * Default constructor for non-resident student
+     */
     public NonResident(){
         this.setProfile(null);
         this.setCreditHours(0);
     }
+
 
     /**
      * Parameterized constructor for a non-resident that calls the super constructor.

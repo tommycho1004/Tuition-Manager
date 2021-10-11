@@ -9,21 +9,28 @@ public class Roster {
     private Student[] roster = new Student[4];
     private int size = 0; //keep track of the number of students in the roster
 
+    /**
+     * A getter for the number of students in the roster
+     *
+     * @return int of students in the roster
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * A method to find a student and return which index they're in in the roster
+     *
+     * @param student Student who is being found
+     * @return int index of student if found, -1 otherwise
+     */
     private int find(Student student) {
         for (var i = 0; i < size; i++) {
-            if (roster[i].equals(student)) {
+            if (roster[i].getProfile().equals(student.getProfile())) {
                 return i;
             }
         }
         return -1;
-    }
-
-    public int finds(Student student) {
-        return find(student);
     }
 
     /**
@@ -78,6 +85,9 @@ public class Roster {
         return false;
     }
 
+    /**
+     * A method to print the roster of students as is.
+     */
     public void print() {
         System.out.println("* list of students in the roster **");
         for (int i = 0; i < size; i++) {
@@ -86,6 +96,9 @@ public class Roster {
         System.out.println("* end of roster **");
     }
 
+    /**
+     * A method to print the roster of students by order of alphabetical first name
+     */
     public void printByName() {
         Student[] newArray = roster;
         for (int i = 0; i < size - 1; i++) {
@@ -97,14 +110,17 @@ public class Roster {
                 }
             }
         }
-
         System.out.println("* list of students ordered by name **");
         for (int i = 0; i < size; i++) {
             System.out.println(newArray[i].toString());
         }
-        System.out.println("** end of roster **");
+        System.out.println("* end of roster **");
     }
 
+    /**
+     * A method to print the roster of students by the date they paid
+     * Only prints students who have paid some amount already
+     */
     public void printByPaymentDate() {
         int paymentSize = 0;
         for (int i = 0; i < size; i++) {
@@ -132,17 +148,17 @@ public class Roster {
                     }
                 }
             }
-
             System.out.println("* list of students made payments ordered by payment date **");
             for (int i = 0; i < paymentSize; i++) {
                 System.out.println(newArray[i].toString());
             }
             System.out.println("* end of roster **");
         }
-
     }
 
-
+    /**
+     * A method to calculate the initial tuition of a student who hasn't been set yet
+     */
     public void calculate() {
         for (int i = 0; i < size; i++) {
             if (roster[i] instanceof International) {
@@ -157,33 +173,52 @@ public class Roster {
         }
     }
 
+    /**
+     * A method that updates a student's payment towards their tuition
+     *
+     * @param student       Student that is paying their tuition
+     * @param paymentAmount amount the student is paying in double form
+     * @param date          Date the student is paying on
+     * @return true if payment was successful, false otherwise
+     */
     public boolean payTuition(Student student, double paymentAmount, Date date) { // false if amount greater than amount due
-        if (paymentAmount <= student.getTuitionDue()) {
-            student.payTuition(paymentAmount, date);
-            return true;
-        } else return false;
+        if (find(student) != -1) {
+            if (paymentAmount <= roster[find(student)].getTuitionDue()) {
+                roster[find(student)].payTuition(paymentAmount, date);
+                return true;
+            } else return false; //the amount is greater than the amount due
+        }
+        return false; //didn't find the student
     }
 
-    public boolean setStudyAbroad(Student student) { // returns false if couldn't find international student
+    /**
+     * A method that sets the study abroad status of an international student
+     *
+     * @param student Student who is studying abroad
+     * @return true if the setting was successful, false otherwise
+     */
+    public boolean setStudyAbroad(Student student) {
         if (find(student) != -1) {
-            if (student instanceof International) {
-                ((International) student).setStudyAbroad();
-                if (student.getCreditHours() > 12) {
-                    student.setCreditHours(12);
+            if (roster[find(student)] instanceof International) {
+                ((International) roster[find(student)]).setStudyAbroad();
+                if (roster[find(student)].getCreditHours() > 12) {
+                    roster[find(student)].setCreditHours(12);
                 }
-                student.setTotalPayment(0);
-                student.setTuitionDue(0);
+                roster[find(student)].setTotalPayment(0);
+                roster[find(student)].setTuitionDue(0);
                 Date temp = new Date("0/0/0");
-                student.setLastPaid(temp);
-                student.tuitionDue();
+                roster[find(student)].setLastPaid(temp);
+                roster[find(student)].setMadePayment(false);
+                roster[find(student)].tuitionDue();
                 return true;
-            } else return false;
-        } else return false;
+            } else return false; //student is not international
+        } else return false; //student is not found
     }
 
     /**
      * A method for the command to set financial aid of a resident student.
-     * @param student Student that is being granted financial aid.
+     *
+     * @param student      Student that is being granted financial aid.
      * @param financialAid amount they are awarded
      * @return 4 if successful, 3 if the student is part time (unsuccessful),
      * 2 if the student already received it (unsuccessful), 1 if the student isn't a resident (unsuccessful)
@@ -191,11 +226,11 @@ public class Roster {
      */
     public int setFinancialAid(Student student, double financialAid) {
         if (find(student) != -1) {
-            if (student instanceof Resident) {
-                if (!((Resident) student).getFinancialAid()) {
+            if (roster[find(student)] instanceof Resident) {
+                if (!((Resident) roster[find(student)]).getFinancialAid()) {
                     //((Resident) student).getFinancialAid() == false)
-                    if (student.getIsFullTime()) {
-                        ((Resident) student).receiveFinAid(financialAid);
+                    if (roster[find(student)].getIsFullTime()) {
+                        ((Resident) roster[find(student)]).receiveFinAid(financialAid);
                         return 4;
                     } else return 3;
                 } else return 2;

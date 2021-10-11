@@ -22,7 +22,7 @@ public enum Major {
             return "ME";
         }
         else{
-            return "Unknown";
+            return "--";
         }
     }
 }

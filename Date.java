@@ -14,11 +14,16 @@ public class Date implements Comparable<Date> {
 
     /**
      * A method that converts a date object to a string.
-     *
+     * If there is no current date, return "--/--/--"
      * @return the date in string form
      */
     public String dateString() {
-        return month + "/" + day + "/" + year;
+        if(year == 0 || this==null){
+            return "--/--/--";
+        }
+        else{
+            return month + "/" + day + "/" + year;
+        }
     }
 
     /**

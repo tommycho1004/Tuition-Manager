@@ -7,40 +7,19 @@ public class Profile implements Comparable<Profile> {
     private String name;
     private Major major; //5 majors and 2-character each: CS, IT, BA, EE, ME
 
-    public Profile(String name, String major){
+    /**
+     * A parameterized constructor for the profile object
+     *
+     * @param name  Name of the student in string form
+     * @param major Major of the student in string form
+     */
+    public Profile(String name, String major) {
         this.name = name;
         this.setMajor(major);
     }
-    /**
-     * A setter method to set the name of a student in their profile.
-     *
-     * @param name name of a student in String form
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public int compareTo(Profile profile) { // - if name 2 goes after name 1, + if name 1 goes after
-        String Name1 = this.name.replace(" ", "").toLowerCase();
-        String Name2 = profile.name.replace(" ", "").toLowerCase();
-        int compareLength = Math.min(Name1.length(), Name2.length());
-        for (int i = 0; i < compareLength; i++) {
-            int str1_ch = (int) Name1.charAt(i);
-            int str2_ch = (int) Name2.charAt(i);
-            if (str1_ch != str2_ch) {
-                return str1_ch - str2_ch;
-            }
-        }
-        if (Name1.length() != Name2.length()) {
-            return Name1.length() - Name2.length();
-        } else {
-            return 0;
-        }
-    }
 
     /**
-     * A setter method to set the major of a student in their profile.
+     * A setter method to set the major of a student in their profile
      *
      * @param major major or a student in String form.
      */
@@ -53,19 +32,6 @@ public class Profile implements Comparable<Profile> {
             case "ME", "Me", "mE", "me" -> this.major = Major.ME;
             default -> this.major = Major.Unknown;
         }
-        /*if (major.equals("CS") || major.equals("Cs") || major.equals("cS") || major.equals("cs")) {
-            this.major = Major.CS;
-        } else if (major.equals("IT") || major.equals("It") || major.equals("iT") || major.equals("it")) {
-            this.major = Major.IT;
-        } else if (major.equals("BA") || major.equals("Ba") || major.equals("bA") || major.equals("ba")) {
-            this.major = Major.BA;
-        } else if (major.equals("EE") || major.equals("Ee") || major.equals("eE") || major.equals("ee")) {
-            this.major = Major.EE;
-        } else if (major.equals("ME") || major.equals("Me") || major.equals("mE") || major.equals("me")) {
-            this.major = Major.ME;
-        } else {
-            this.major = Major.Unknown;
-        }*/
     }
 
     /**
@@ -76,6 +42,31 @@ public class Profile implements Comparable<Profile> {
     @Override
     public String toString() {
         return this.name + ":" + this.major.majorString();
+    }
+
+    /**
+     * A method that compares one profile to another by alphabetical order
+     *
+     * @param profile Profile of the student being compared with
+     * @return negative int if name 2 goes after name 1, positive int if name 1 goes after name 2, 0 if they're the same
+     */
+    @Override
+    public int compareTo(Profile profile) {
+        String Name1 = this.name.replace(" ", "").toLowerCase();
+        String Name2 = profile.name.replace(" ", "").toLowerCase();
+        int compareLength = Math.min(Name1.length(), Name2.length());
+        for (int i = 0; i < compareLength; i++) {
+            int str1_ch = Name1.charAt(i);
+            int str2_ch = Name2.charAt(i);
+            if (str1_ch != str2_ch) {
+                return str1_ch - str2_ch;
+            }
+        }
+        if (Name1.length() != Name2.length()) {
+            return Name1.length() - Name2.length();
+        } else {
+            return 0;
+        }
     }
 
     /**

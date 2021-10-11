@@ -12,6 +12,7 @@ public class Student {
     private Date lastPaid;
     private double totalPayment;
     private double tuitionDue = 0.0;
+    private boolean madePayment;
 
     public static double universityFee = 3268.0;
     public static double partTimeUniversityFee = 2614.4;
@@ -69,7 +70,13 @@ public class Student {
     }
 
     public Date getLastPaid(){
-        return lastPaid;
+        if(lastPaid==null){
+            Date temp = new Date("0/0/0");
+            return temp;
+        }
+        else{
+            return lastPaid;
+        }
     }
 
     /**
@@ -88,13 +95,14 @@ public class Student {
         return tuitionDue;
     }
 
+    public boolean getMadePayment(){
+        return madePayment;
+    }
+
     /**
      * A default constructor for the student object
      */
-    public Student(){
-        this.profile = null;
-        this.creditHours = 0;
-    }
+    public Student(){ }
 
     /**
      * A parameterized constructor for the student object
@@ -113,8 +121,8 @@ public class Student {
      * @param creditHours Credit hours the student is taking in integer form
      */
     public Student(String name, String major, int creditHours){
-        this.profile.setName(name);
-        this.profile.setMajor(major);
+        Profile profile = new Profile(name, major);
+        this.profile = profile;
         this.creditHours = creditHours;
         if (creditHours >= 12){
             this.isFullTime = true;
@@ -134,10 +142,11 @@ public class Student {
      * A method lets a student pay their tuition
      * @param amount integer value of how much the student is paying right now
      */
-    public void payTuition(int amount, Date datePaid){
+    public void payTuition(double amount, Date datePaid){
         this.tuitionDue = this.tuitionDue - amount;
         this.lastPaid = datePaid;
         this.totalPayment = this.totalPayment + amount;
+        this.madePayment = true;
     }
 
     /**
@@ -146,7 +155,7 @@ public class Student {
      */
     @Override
     public String toString(){
-        DecimalFormat dec = new DecimalFormat("#.00");
+        DecimalFormat dec = new DecimalFormat("#0.00");
         return this.profile.toString() + ":" + this.creditHours + " credit hours:tuition due:" +
                 dec.format(this.tuitionDue) + ":total payment:" + dec.format(this.totalPayment) +
                 ":last payment date:" + this.lastPaid.dateString() + ":student";

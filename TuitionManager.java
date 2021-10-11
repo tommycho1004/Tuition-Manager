@@ -11,6 +11,25 @@ import java.util.StringTokenizer;
 public class TuitionManager {
 
     /**
+     * A helper method to determine if a major is valid or not
+     * @param major Major of a student in string form
+     * @return true if the major is valid, false otherwise
+     */
+    public boolean majorChecker(String major){
+        if (major.equals("CS") || major.equals("Cs") || major.equals("cS") || major.equals("cs") ||
+                major.equals("IT") || major.equals("It") || major.equals("iT") || major.equals("it") ||
+                major.equals("BA") || major.equals("Ba") || major.equals("bA") || major.equals("ba") ||
+                major.equals("EE") || major.equals("Ee") || major.equals("eE") || major.equals("ee") ||
+                major.equals("ME") || major.equals("Me") || major.equals("mE") || major.equals("me")){
+            return true;
+        }
+        else{
+            System.out.println(major + "' is not a valid major.");
+            return false;
+        }
+    }
+
+    /**
      * A helper method to check whether the state is part of the tri-state area or not
      * @param state state the user inputted where they're living in
      * @return true if the state is NY or CT, false otherwise
@@ -93,24 +112,10 @@ public class TuitionManager {
     }
 
 
-    /**
-     * A helper method to determine if a major is valid or not
-     * @param major Major of a student in string form
-     * @return true if the major is valid, false otherwise
-     */
-    public boolean majorChecker(String major){
-        if (major.equals("CS") || major.equals("Cs") || major.equals("cS") || major.equals("cs") ||
-                major.equals("IT") || major.equals("It") || major.equals("iT") || major.equals("it") ||
-                major.equals("BA") || major.equals("Ba") || major.equals("bA") || major.equals("ba") ||
-                major.equals("EE") || major.equals("Ee") || major.equals("eE") || major.equals("ee") ||
-                major.equals("ME") || major.equals("Me") || major.equals("mE") || major.equals("me")){
-            return true;
-        }
-        else{
-            System.out.println(major + "' is not a valid major.");
-            return false;
-        }
-    }
+    //variables to use for the next method
+    private static int ZERO = 0;
+    private static int minCredits = 3;
+    private static int maxCredits = 24;
 
     /**
      * A helper method to determine whether the number of credit hours is valid or not
@@ -118,15 +123,15 @@ public class TuitionManager {
      * @return true if amount is valid, false otherwise
      */
     public boolean creditChecker(int creditHours){
-        if (creditHours < 0){
+        if (creditHours < ZERO){
             System.out.println("Credit hours cannot be negative.");
             return false;
         }
-        else if(creditHours < 3){
+        else if(creditHours < minCredits){
             System.out.println("Minimum credit hours is 3.");
             return false;
         }
-        else if(creditHours > 24){
+        else if(creditHours > maxCredits){
             System.out.println("Credit hours exceed the maximum 24.");
             return false;
         }
@@ -166,12 +171,15 @@ public class TuitionManager {
                     int creditHours = Integer.parseInt(creditHourString);
                     if(creditChecker(creditHours) && majorChecker(major)){ //check for valid credit hours and major
                         Resident resident = new Resident(name, major, creditHours);
-                        roster.add(resident);
+                        if (!roster.add(resident)){
+                            System.out.println("Student is already in the roster.");
+                        }
+                        else{
+                            //roster.add(resident); //(try)
+                            System.out.println("Student added.");
+                        }
                     }
                 }
-            }
-            else{
-                return;
             }
         }
         else if(command.equals("AN")){
@@ -183,12 +191,15 @@ public class TuitionManager {
                     int creditHours = Integer.parseInt(creditHourString);
                     if(creditChecker(creditHours) && majorChecker(major)){ //check for valid credit hours and major
                         NonResident nonResident = new NonResident(name, major, creditHours);
-                        roster.add(nonResident);
+                        if (!roster.add(nonResident)){
+                            System.out.println("Student is already in the roster.");
+                        }
+                        else{
+                            //roster.add(nonResident); //(try)
+                            System.out.println("Student added.");
+                        }
                     }
                 }
-            }
-            else{
-                return;
             }
         }
         else if(command.equals("AT")){
@@ -201,15 +212,18 @@ public class TuitionManager {
                     int creditHours = Integer.parseInt(creditHourString);
                     if(creditChecker(creditHours) && majorChecker(major)){ //check for valid credit hours and major
                         TriState triState = new TriState(name, major, creditHours, state);
-                        roster.add(triState);
+                        if (!roster.add(triState)){
+                            System.out.println("Student is already in the roster.");
+                        }
+                        else{
+                            //roster.add(triState); //(try)
+                            System.out.println("Student added.");
+                        }
                     }
-                }
-                else{
-                    return;
                 }
             }
         }
-        else{ //add international student
+        else if(command.equals("AI")){
             if(parameterCheckerFour(st)){
                 String name = st.nextToken();
                 String major = st.nextToken();
@@ -220,11 +234,32 @@ public class TuitionManager {
                     //check for valid credit hours and major
                     if(creditChecker(creditHours) && majorChecker(major) && creditCheckerInternational(creditHours)){
                         International international = new International(name, major, creditHours, studyAbroadStatus);
-                        roster.add(international);
+                        if (!roster.add(international)){
+                            System.out.println("Student is already in the roster.");
+                        }
+                        else{
+                            //roster.add(international); //(try)
+                            System.out.println("Student added.");
+                        }
                     }
                 }
-                else{
-                    return;
+            }
+        }
+        else{ //removes student
+            if(st.countTokens() != 2){
+                System.out.println("Invalid number of parameters!");
+            }
+            else{
+                String name = st.nextToken();
+                String major = st.nextToken();
+                if (majorChecker(major)){
+                    Student temp = new Student(name, major);
+                    if(roster.remove(temp) == false){
+                        System.out.println("Student is not in the roster.");
+                    }
+                    else{
+                        System.out.println("Student removed from the roster.");
+                    }
                 }
             }
         }
@@ -267,6 +302,16 @@ public class TuitionManager {
         }
     }
 
+    public boolean financialAidChecker(double financialAid){
+        if (financialAid < 0 || financialAid > 10000){
+            System.out.println("Invalid amount.");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     /**
      * A helper method that reads the input command and executes its respective function having to do with tuition
      * @param st the string tokenizer with inputs from the user
@@ -280,34 +325,76 @@ public class TuitionManager {
                 String major = st.nextToken();
                 int paymentAmount = Integer.parseInt(st.nextToken());
                 Date date = new Date(st.nextToken());
-                if(paymentChecker(paymentAmount) && majorChecker(major)){
-                    Student student = new Student(name, major);
-                    student.payTuition(paymentAmount, date);
-                    //add error if payment amount is greater than payment due
+                if(!date.isValid()){
+                    System.out.println("Payment date invalid");
+                }
+                else{
+                    if(paymentChecker(paymentAmount) && majorChecker(major)){
+                        Student student = new Student(name, major);
+                        if(!roster.payTuition(student, paymentAmount, date)){
+                            System.out.println("Amount is greater than amount due.");
+                        }
+                        else{
+                            System.out.println("Payment applied");
+                        }
+                    }
                 }
             }
-        }
-        else if(command.equals("S")){
-            //find student first
-            if(st.countTokens() != 3){
+        } else if (command.equals("S")) {
+            if (st.countTokens() != 3) {
                 System.out.println("Invalid number of parameters!");
+            }
+            else{
                 String name = st.nextToken();
                 String major = st.nextToken();
                 boolean studyAbroadStatus = Boolean.parseBoolean(st.nextToken());
-                if(majorChecker(major)){
-                    Student student = new Student(name, major);
-                    if(student instanceof International){//find student first to edit roster
-                        International iStudent = (International) student;
-                        iStudent.setStudyAbroad();
+                if (majorChecker(major)) {
+                    International temp = new International(name, major);
+                    if (!roster.setStudyAbroad(temp)){
+                        System.out.println("Couldn't find the international student.");
+                    }
+                    else{
+                        System.out.println("Tuition updated.");
                     }
                 }
             }
         }
         else if(command.equals("C")){
-
+            if(st.countTokens() != 0){
+                System.out.println("Invalid number of parameters!");
+            }
+            else{
+                roster.calculate();
+                System.out.println("Calculation completed");
+            }
         }
         else{ //set financial aid amount
-
+            if(st.countTokens() < 3){
+                System.out.println("Missing the amount.");
+            }
+            else if(st.countTokens() != 3){
+                System.out.println("Invalid number of parameters!");
+            }
+            else{
+                String name = st.nextToken();
+                String major = st.nextToken();
+                double finAidAmount = Double.parseDouble(st.nextToken());
+                if (financialAidChecker(finAidAmount)) {
+                    Student temp = new Student(name, major);
+                    int aidScenario = roster.setFinancialAid(temp, finAidAmount);
+                    if (aidScenario == 4) {
+                        System.out.println("Tuition Updated.");
+                    } else if (aidScenario == 0) {
+                        System.out.println("Student not in the roster.");
+                    } else if (aidScenario == 1) {
+                        System.out.println("Not a resident student.");
+                    } else if (aidScenario == 2) {
+                        System.out.println("Awarded once already.");
+                    } else if (aidScenario == 3) {
+                        System.out.println("Parttime student doesn't qualify for the award.");
+                    }
+                }
+            }
         }
     }
 
@@ -318,14 +405,22 @@ public class TuitionManager {
      * @param command the input command from the user
      */
     public void printHelper(StringTokenizer st, Roster roster, String command){
+        if(st.countTokens() != 0){
+            System.out.println("Invalid number of parameters!");
+            return;
+        }
+        if(roster.getSize() == 0){
+            System.out.println("Student roster is empty!");
+            return;
+        }
         if(command.equals("P")){
-
+            roster.print();
         }
         else if(command.equals("PN")){
-
+            roster.printByName();
         }
         else{ //print only the students who have made payments, ordered by the payment date.
-
+            roster.printByPaymentDate();
         }
     }
 
@@ -339,6 +434,7 @@ public class TuitionManager {
         StringTokenizer st = new StringTokenizer(input, ",");
         Roster roster = new Roster();
         String command = st.nextToken();
+
         while(!command.equals("Q")) {
             if(command.equals("AR") || command.equals("AN") || command.equals("AT") || command.equals("AI") ||
                     command.equals("R")) {
@@ -353,6 +449,10 @@ public class TuitionManager {
             else{
                 System.out.println("Command '" + command + "' not supported!");
             }
+
+            input = reader.nextLine();
+            st = new StringTokenizer(input, ",");
+            command = st.nextToken();
         }
         System.out.println("Tuition Manager terminated.");
     }

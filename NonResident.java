@@ -13,10 +13,8 @@ public class NonResident extends Student{
      * Default constructor for non-resident student
      */
     public NonResident(){
-        this.setProfile(null);
         this.setCreditHours(0);
     }
-
 
     /**
      * Parameterized constructor for a non-resident that calls the super constructor.
@@ -28,6 +26,14 @@ public class NonResident extends Student{
         super(name, major, creditHours);
     }
 
+    /**
+     * Parameterized constructor for a non-resident that calls the super constructor.
+     * @param name Name of the student in string form
+     * @param major Major of the student in string form
+     */
+    public NonResident(String name, String major) {
+        super(name, major);
+    }
 
     /**
      * The calculation method for the tuition of a non-resident student.
@@ -65,7 +71,7 @@ public class NonResident extends Student{
      */
     @Override
     public String toString(){
-        DecimalFormat dec = new DecimalFormat("#.00");
+        DecimalFormat dec = new DecimalFormat("#0.00");
         return this.getProfile().toString() + ":" + this.getCreditHours() + " credit hours:tuition due:" +
                 dec.format(this.getTuitionDue()) + ":total payment:" + dec.format(this.getTotalPayment()) +
                 ":last payment date:" + this.getLastPaid().dateString() + ":non-resident";

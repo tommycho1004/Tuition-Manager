@@ -7,6 +7,10 @@ public class Profile implements Comparable<Profile> {
     private String name;
     private Major major; //5 majors and 2-character each: CS, IT, BA, EE, ME
 
+    public Profile(String name, String major){
+        this.name = name;
+        this.setMajor(major);
+    }
     /**
      * A setter method to set the name of a student in their profile.
      *
@@ -41,7 +45,15 @@ public class Profile implements Comparable<Profile> {
      * @param major major or a student in String form.
      */
     public void setMajor(String major) {
-        if (major.equals("CS") || major.equals("Cs") || major.equals("cS") || major.equals("cs")) {
+        switch (major) {
+            case "CS", "Cs", "cS", "cs" -> this.major = Major.CS;
+            case "IT", "It", "iT", "it" -> this.major = Major.IT;
+            case "BA", "Ba", "bA", "ba" -> this.major = Major.BA;
+            case "EE", "Ee", "eE", "ee" -> this.major = Major.EE;
+            case "ME", "Me", "mE", "me" -> this.major = Major.ME;
+            default -> this.major = Major.Unknown;
+        }
+        /*if (major.equals("CS") || major.equals("Cs") || major.equals("cS") || major.equals("cs")) {
             this.major = Major.CS;
         } else if (major.equals("IT") || major.equals("It") || major.equals("iT") || major.equals("it")) {
             this.major = Major.IT;
@@ -53,7 +65,7 @@ public class Profile implements Comparable<Profile> {
             this.major = Major.ME;
         } else {
             this.major = Major.Unknown;
-        }
+        }*/
     }
 
     /**

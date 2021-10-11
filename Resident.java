@@ -23,6 +23,10 @@ public class Resident extends Student{
         super(name, major, creditHours);
     }
 
+    public boolean getFinancialAid(){
+        return financialAid;
+    }
+
     /**
      * A method that gives a student a specified amount of financial aid and updates their tuition due
      * @param amount amount of financial aid a student receives
@@ -81,7 +85,7 @@ public class Resident extends Student{
      */
     @Override
     public String toString(){
-        DecimalFormat dec = new DecimalFormat("#.00");
+        DecimalFormat dec = new DecimalFormat("#0.00");
         return this.getProfile().toString() + ":" + this.getCreditHours() + " credit hours:tuition due:" +
                 dec.format(this.getTuitionDue()) + ":total payment:" + dec.format(this.getTotalPayment()) +
                 ":last payment date:" + this.getLastPaid().dateString() + ":resident" + this.finAidString();

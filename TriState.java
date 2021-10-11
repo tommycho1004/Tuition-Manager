@@ -82,7 +82,7 @@ public class TriState extends NonResident{
      */
     @Override
     public String toString(){
-        DecimalFormat dec = new DecimalFormat("#.00");
+        DecimalFormat dec = new DecimalFormat("#0.00");
         return this.getProfile().toString() + ":" + this.getCreditHours() + " credit hours:tuition due:" +
                 dec.format(this.getTuitionDue()) + ":total payment:" + dec.format(this.getTotalPayment()) +
                 ":last payment date:" + this.getLastPaid().dateString() + ":non-resident(tri-state):" + stateString();

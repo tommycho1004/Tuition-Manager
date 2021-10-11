@@ -8,20 +8,20 @@ import java.util.StringTokenizer;
  * @author Tommy Cho, Neha Gudur
  */
 public class Date implements Comparable<Date> {
-    private int year;
-    private int month;
-    private int day;
+    private final int year;
+    private final int month;
+    private final int day;
 
     /**
      * A method that converts a date object to a string.
      * If there is no current date, return "--/--/--"
+     *
      * @return the date in string form
      */
     public String dateString() {
-        if(year == 0 || this==null){
+        if (year == 0) {
             return "--/--/--";
-        }
-        else{
+        } else {
             return month + "/" + day + "/" + year;
         }
     }
@@ -43,12 +43,6 @@ public class Date implements Comparable<Date> {
      * Returns today's date
      */
     Calendar today = Calendar.getInstance();
-
-    public Date() {
-        this.year = today.get(Calendar.YEAR);
-        this.month = today.get(Calendar.MONTH);
-        this.day = today.get(Calendar.DATE);
-    } //create an object with today’s date (see Calendar class)
 
     /**
      * static integers
@@ -125,9 +119,7 @@ public class Date implements Comparable<Date> {
                 return false;
             }
             if (this.month == today.get(Calendar.MONTH) + 1) {
-                if (this.day > today.get(Calendar.DATE)) {
-                    return false;
-                }
+                return this.day <= today.get(Calendar.DATE);
             }
         }
         return true;
